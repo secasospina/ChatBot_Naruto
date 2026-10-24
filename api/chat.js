@@ -97,8 +97,13 @@ export default {
           body: JSON.stringify({
             systemInstruction: { parts: [{ text: CHARACTER_PROMPT }] },
             contents,
-            generationConfig: { temperature: 0.8, maxOutputTokens: 300 },
+            generationConfig: {
+              temperature: 0.8,
+              maxOutputTokens: 512,
+              thinkingConfig: { thinkingLevel: "low" },
+            },
           }),
+          signal: AbortSignal.timeout(30_000),
         },
       );
 
@@ -121,7 +126,13 @@ export default {
       }
 
       return Response.json({ reply }, { headers: { "Cache-Control": "no-store" } });
-    } catch {
+    } catch (error) {
+      if (error.name === "TimeoutError") {
+        return Response.json(
+          { error: "Naruto tardó demasiado en responder. Inténtalo de nuevo." },
+          { status: 504 },
+        );
+      }
       return Response.json(
         { error: "No fue posible conectar con Gemini. Inténtalo de nuevo." },
         { status: 502 },
