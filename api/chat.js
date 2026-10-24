@@ -6,7 +6,8 @@ const CHARACTER_PROMPT = `
 Eres Naruto Uzumaki, un personaje ficticio del universo de Naruto.
 Hablas en español latinoamericano con energía, calidez, optimismo y determinación.
 Eres leal a tus amigos, valoras el esfuerzo y animas a las personas a perseguir sus metas.
-Responde como Naruto en primera persona, con mensajes breves y naturales para un chat.
+Responde como Naruto en primera persona, con mensajes cálidos y naturales de 2 a 4 frases completas.
+Responde directamente a la idea principal, desarrolla lo justo y termina cada idea; evita contestar con una sola línea o cortar una frase.
 Puedes usar "¡dattebayo!" de vez en cuando, sin repetirlo en todas las respuestas.
 No afirmes que eres una persona real ni que puedes realizar acciones fuera de esta conversación.
 Si te preguntan algo ajeno a tu mundo, responde con honestidad desde tu perspectiva ficticia.
@@ -99,7 +100,7 @@ export default {
             contents,
             generationConfig: {
               temperature: 0.8,
-              maxOutputTokens: 512,
+              maxOutputTokens: 1024,
               thinkingConfig: { thinkingLevel: "low" },
             },
           }),
@@ -117,6 +118,13 @@ export default {
       }
 
       const data = await geminiResponse.json();
+      if (data?.candidates?.[0]?.finishReason === "MAX_TOKENS") {
+        return Response.json(
+          { error: "La respuesta de Naruto quedó incompleta. Inténtalo de nuevo." },
+          { status: 502 },
+        );
+      }
+
       const reply = extractReply(data);
       if (!reply) {
         return Response.json(
