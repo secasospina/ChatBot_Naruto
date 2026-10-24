@@ -8,9 +8,15 @@ const greeting = {
 
 // Dibuja el historial del chat y desplaza la lista al último mensaje.
 function renderMessages(list) {
+  const typing = list.querySelector("[data-chat-typing]");
   list.replaceChildren();
 
   [greeting, ...messages].forEach(({ role, text }) => {
+    const row = document.createElement("div");
+    row.className = `message-row message-row--${role}`;
+
+    if (role === "assistant") row.append(createNarutoAvatar());
+
     const message = document.createElement("article");
     message.className = `message message--${role}`;
 
@@ -23,10 +29,22 @@ function renderMessages(list) {
     body.textContent = text;
 
     message.append(author, body);
-    list.append(message);
+    row.append(message);
+    list.append(row);
   });
 
+  if (typing) list.append(typing);
   list.scrollTop = list.scrollHeight;
+}
+
+// Crea el avatar decorativo que identifica los mensajes de Naruto.
+function createNarutoAvatar() {
+  const avatar = document.createElement("img");
+  avatar.className = "chat-avatar";
+  avatar.src = "/assets/naruto-avatar.jpg";
+  avatar.alt = "";
+  avatar.setAttribute("aria-hidden", "true");
+  return avatar;
 }
 
 // Conecta el formulario del chat con la ruta del servidor /api/chat.
@@ -35,7 +53,7 @@ export function setupChat(root) {
   const form = root.querySelector("[data-chat-form]");
   const input = form.elements.message;
   const sendButton = root.querySelector("[data-send-button]");
-  const status = root.querySelector("[data-chat-status]");
+  const typing = root.querySelector("[data-chat-typing]");
   const error = root.querySelector("[data-chat-error]");
 
   renderMessages(list);
@@ -54,7 +72,8 @@ export function setupChat(root) {
     isSending = true;
     input.disabled = true;
     sendButton.disabled = true;
-    status.textContent = "Naruto está pensando...";
+    typing.hidden = false;
+    list.scrollTop = list.scrollHeight;
 
     try {
       const response = await fetch("/api/chat", {
@@ -85,7 +104,7 @@ export function setupChat(root) {
       isSending = false;
       input.disabled = false;
       sendButton.disabled = false;
-      status.textContent = "";
+      typing.hidden = true;
       input.focus();
     }
   });
