@@ -1,3 +1,5 @@
+import { setupChat } from "./chat.js";
+
 const app = document.querySelector("#app");
 
 const views = {
@@ -18,11 +20,26 @@ const views = {
       <div class="page-heading">
         <p class="eyebrow">Aldea Oculta de la Hoja</p>
         <h1>Chat con Naruto</h1>
-        <p>Esta vista se convertirá en el espacio de conversación.</p>
+        <p>Comparte tus metas y tus preguntas con Naruto.</p>
       </div>
-      <div class="chat-placeholder" role="status">
-        <span class="avatar" aria-hidden="true">う</span>
-        <p>¡Hola! Soy Naruto. ¿Cuál es tu sueño?</p>
+      <div class="chat-panel">
+        <div class="chat-messages" data-chat-messages aria-live="polite" aria-relevant="additions"></div>
+        <p class="chat-status" data-chat-status aria-live="polite"></p>
+        <p class="chat-error" data-chat-error role="alert" hidden></p>
+        <form class="chat-form" data-chat-form>
+          <label class="visually-hidden" for="chat-input">Escribe tu mensaje para Naruto</label>
+          <input
+            id="chat-input"
+            name="message"
+            type="text"
+            maxlength="500"
+            placeholder="Escribe tu mensaje..."
+            autocomplete="off"
+            required
+          />
+          <button class="button button-primary" type="submit" data-send-button>Enviar</button>
+        </form>
+        <p class="chat-hint">Máximo 500 caracteres. Tus mensajes se mantienen mientras esta página siga abierta.</p>
       </div>
     </section>
   `,
@@ -39,11 +56,13 @@ const views = {
   `,
 };
 
+// Devuelve una ruta válida y usa /home si la ruta no existe.
 function normalizePath(path) {
   if (path === "/") return "/home";
   return views[path] ? path : "/home";
 }
 
+// Renderiza la vista de la URL actual y actualiza la navegación.
 function renderRoute() {
   const path = normalizePath(window.location.pathname);
   if (path !== window.location.pathname) {
@@ -53,8 +72,10 @@ function renderRoute() {
   document.querySelectorAll("[data-link]").forEach((link) => {
     link.toggleAttribute("aria-current", link.pathname === path);
   });
+  if (path === "/chat") setupChat(app);
 }
 
+// Intercepta enlaces internos para navegar sin recargar la página.
 document.addEventListener("click", (event) => {
   const link = event.target.closest("a[data-link]");
   if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;

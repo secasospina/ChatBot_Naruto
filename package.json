@@ -4,11 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vercel dev",
+    "vercel:dev": "vercel dev",
     "test": "vitest run"
   },
   "devDependencies": {
-    "vercel": "^48.1.0",
-    "vitest": "^3.2.4"
+    "vercel": "^65.2.0",
+    "vitest": "^5.0.5"
   }
 }

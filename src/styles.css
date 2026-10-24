@@ -33,9 +33,22 @@ h1 span { color: var(--orange); }
 .page-heading { margin-bottom: 2rem; }
 .page-heading h1, .about-page h1 { font-size: clamp(2rem, 8vw, 3.5rem); }
 .page-heading > p:last-child, .about-page > p:last-child { max-width: 42rem; color: var(--muted); line-height: 1.7; }
-.chat-placeholder { display: flex; max-width: 34rem; align-items: center; gap: .8rem; padding: 1rem; border: 1px solid #eee4dc; border-radius: 1rem; background: var(--surface); }
-.chat-placeholder p { margin: 0; line-height: 1.5; }
-.avatar { display: grid; width: 2.5rem; height: 2.5rem; flex: 0 0 auto; place-items: center; border-radius: 50%; color: white; background: var(--orange); font-weight: 800; }
+.chat-panel { display: flex; min-height: 55vh; flex-direction: column; overflow: hidden; border: 1px solid #eee4dc; border-radius: 1rem; background: var(--surface); box-shadow: 0 1rem 3rem #50341a0d; }
+.chat-messages { display: flex; min-height: 16rem; flex: 1; flex-direction: column; gap: 1rem; overflow-y: auto; padding: 1rem; }
+.message { width: fit-content; max-width: min(88%, 34rem); padding: .85rem 1rem; border-radius: 1rem; }
+.message--assistant { align-self: flex-start; background: #fff2e8; }
+.message--user { align-self: flex-end; color: white; background: #34302d; }
+.message-author { display: block; margin-bottom: .3rem; font-size: .75rem; font-weight: 800; opacity: .75; }
+.message-text { margin: 0; line-height: 1.55; overflow-wrap: anywhere; white-space: pre-wrap; }
+.chat-status, .chat-error { margin: 0; padding: 0 1rem .75rem; font-size: .85rem; }
+.chat-status { color: var(--muted); }
+.chat-error { color: #a32920; }
+.chat-form { display: flex; gap: .6rem; padding: .8rem; border-top: 1px solid #eee4dc; }
+.chat-form input { width: 100%; min-width: 0; padding: .85rem 1rem; border: 1px solid #d9cec5; border-radius: .7rem; color: var(--ink); background: #fff; font: inherit; }
+.chat-form input:focus { outline: 3px solid #f2672233; border-color: var(--orange); }
+.chat-form input:disabled, .chat-form button:disabled { cursor: wait; opacity: .65; }
+.chat-hint { margin: 0; padding: 0 .9rem .9rem; color: var(--muted); font-size: .75rem; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%); }
 .site-footer { padding: 1.25rem; color: var(--muted); text-align: center; font-size: .78rem; }
 .site-footer p { margin: 0; }
 
@@ -43,6 +56,8 @@ h1 span { color: var(--orange); }
   .site-header { padding-inline: max(2rem, calc((100vw - 62rem) / 2)); }
   .main-nav { gap: 1.5rem; }
   .hero { min-height: 72vh; }
+  .chat-messages { padding: 1.5rem; }
+  .chat-form { padding: 1rem; }
 }
 
 @media (min-width: 1000px) {
