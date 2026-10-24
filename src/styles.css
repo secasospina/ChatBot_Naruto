@@ -1,0 +1,50 @@
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #24201d;
+  background: #fffaf5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --orange: #f26722;
+  --ink: #24201d;
+  --muted: #6b625c;
+  --surface: #ffffff;
+}
+
+* { box-sizing: border-box; }
+body { min-width: 320px; min-height: 100vh; margin: 0; display: flex; flex-direction: column; }
+a { color: inherit; }
+.site-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem; background: var(--surface); border-bottom: 1px solid #eee4dc; }
+.brand { display: inline-flex; align-items: center; gap: .6rem; color: var(--ink); font-size: .85rem; font-weight: 800; letter-spacing: .08em; text-decoration: none; }
+.brand-mark { display: grid; width: 2rem; height: 2rem; place-items: center; border-radius: 50%; color: white; background: var(--orange); font-size: 1.15rem; }
+.main-nav { display: flex; gap: .9rem; }
+.main-nav a { color: var(--muted); font-size: .9rem; text-decoration: none; }
+.main-nav a[aria-current] { color: var(--orange); font-weight: 700; }
+#app { flex: 1; }
+.page-shell { width: min(100% - 2rem, 62rem); margin-inline: auto; }
+.hero { display: flex; min-height: 68vh; flex-direction: column; align-items: flex-start; justify-content: center; padding-block: 4rem; }
+.eyebrow { margin: 0 0 .8rem; color: var(--orange); font-size: .8rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+h1 { max-width: 15ch; margin: 0; font-size: clamp(2.4rem, 10vw, 5rem); line-height: 1.02; letter-spacing: -.055em; }
+h1 span { color: var(--orange); }
+.hero-copy { max-width: 38rem; margin: 1.4rem 0 1.7rem; color: var(--muted); font-size: 1.1rem; line-height: 1.65; }
+.button { display: inline-flex; min-height: 3rem; align-items: center; justify-content: center; padding: .8rem 1.2rem; border-radius: .7rem; font-weight: 750; text-decoration: none; }
+.button-primary { color: white; background: var(--orange); box-shadow: 0 .5rem 1.25rem #f2672228; }
+.hero-note { color: var(--muted); font-size: .8rem; }
+.chat-page, .about-page { padding-block: 3rem; }
+.page-heading { margin-bottom: 2rem; }
+.page-heading h1, .about-page h1 { font-size: clamp(2rem, 8vw, 3.5rem); }
+.page-heading > p:last-child, .about-page > p:last-child { max-width: 42rem; color: var(--muted); line-height: 1.7; }
+.chat-placeholder { display: flex; max-width: 34rem; align-items: center; gap: .8rem; padding: 1rem; border: 1px solid #eee4dc; border-radius: 1rem; background: var(--surface); }
+.chat-placeholder p { margin: 0; line-height: 1.5; }
+.avatar { display: grid; width: 2.5rem; height: 2.5rem; flex: 0 0 auto; place-items: center; border-radius: 50%; color: white; background: var(--orange); font-weight: 800; }
+.site-footer { padding: 1.25rem; color: var(--muted); text-align: center; font-size: .78rem; }
+.site-footer p { margin: 0; }
+
+@media (min-width: 700px) {
+  .site-header { padding-inline: max(2rem, calc((100vw - 62rem) / 2)); }
+  .main-nav { gap: 1.5rem; }
+  .hero { min-height: 72vh; }
+}
+
+@media (min-width: 1000px) {
+  .hero { padding-block: 6rem; }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "naruto-chatbot-m3",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "vercel": "^48.1.0",
+    "vitest": "^3.2.4"
+  }
+}
