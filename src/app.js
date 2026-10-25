@@ -32,11 +32,19 @@ const views = {
         <img class="heading-art" src="/assets/naruto-greeting.jpg" alt="Naruto sonríe con su sombrero de Hokage" />
       </div>
       <div class="chat-panel">
+        <div class="chat-toolbar">
+          <p class="chat-history-status" data-history-status data-state="empty" role="status">
+            <span data-history-status-text>Aún no hay historial guardado</span>
+          </p>
+          <button class="button chat-clear-button" type="button" data-clear-history disabled>
+            Borrar historial
+          </button>
+        </div>
         <div class="chat-messages" data-chat-messages aria-live="polite" aria-relevant="additions">
           <div class="chat-typing" data-chat-typing role="status" hidden>
             <img class="chat-avatar" src="/assets/naruto-avatar.jpg" alt="" aria-hidden="true" />
             <div class="chat-typing-bubble">
-              <span>Naruto está pensando</span>
+              <span>Naruto está escribiendo</span>
               <span class="typing-dots" aria-hidden="true"><i></i><i></i><i></i></span>
             </div>
           </div>
@@ -55,7 +63,7 @@ const views = {
           />
           <button class="button button-primary" type="submit" data-send-button>Enviar</button>
         </form>
-        <p class="chat-hint">Máximo 500 caracteres. Tus mensajes se mantienen mientras esta página siga abierta.</p>
+        <p class="chat-hint">Máximo 500 caracteres. El historial se guarda aquí y puedes borrarlo cuando quieras.</p>
       </div>
     </section>
   `,
