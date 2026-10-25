@@ -76,6 +76,8 @@ h1 span { color: var(--orange); }
 .message--user { color: white; background: #34302d; border-bottom-right-radius: .35rem; }
 .message-author { display: block; margin-bottom: .3rem; font-size: .75rem; font-weight: 800; opacity: .75; }
 .message-text { margin: 0; line-height: 1.55; overflow-wrap: anywhere; white-space: pre-wrap; }
+.message-time { display: block; margin-top: .45rem; color: var(--muted); font-size: .68rem; line-height: 1; text-align: right; }
+.message--user .message-time { color: #ffffffb8; }
 .chat-typing { display: flex; align-items: flex-end; gap: .55rem; color: var(--muted); font-size: .8rem; }
 .chat-typing[hidden] { display: none; }
 .chat-typing-bubble { display: flex; min-height: 2.75rem; align-items: center; gap: .65rem; padding: .6rem .85rem; border-radius: 1rem 1rem 1rem .35rem; background: #fff2e8; }

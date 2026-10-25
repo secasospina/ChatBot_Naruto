@@ -61,7 +61,13 @@ function loadMessages() {
       message.text.trim().length > 0 &&
       message.text.trim().length <= MAX_MESSAGE_LENGTH,
     )
-    .map(({ role, text }) => ({ role, text: text.trim() }));
+    .map(({ role, text, timestamp }) => ({
+      role,
+      text: text.trim(),
+      timestamp: typeof timestamp === "string" && !Number.isNaN(Date.parse(timestamp))
+        ? timestamp
+        : null,
+    }));
 
   hasStorageError = false;
   isHistorySaved = validMessages.length > 0;
@@ -105,12 +111,21 @@ function getGeminiContext() {
   return context[0]?.role === "assistant" ? context.slice(1) : context;
 }
 
+// Formatea la hora local del mensaje para mostrarla de forma breve.
+function formatMessageTime(timestamp) {
+  if (!timestamp) return "";
+  return new Intl.DateTimeFormat("es-CO", {
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(timestamp));
+}
+
 // Dibuja el historial del chat y desplaza la lista al último mensaje.
 function renderMessages(list) {
   const typing = list.querySelector("[data-chat-typing]");
   list.replaceChildren();
 
-  [greeting, ...messages].forEach(({ role, text }) => {
+  [greeting, ...messages].forEach(({ role, text, timestamp }) => {
     const row = document.createElement("div");
     row.className = `message-row message-row--${role}`;
 
@@ -128,6 +143,14 @@ function renderMessages(list) {
     body.textContent = text;
 
     message.append(author, body);
+    const messageTime = formatMessageTime(timestamp);
+    if (messageTime) {
+      const time = document.createElement("time");
+      time.className = "message-time";
+      time.dateTime = timestamp;
+      time.textContent = messageTime;
+      message.append(time);
+    }
     row.append(message);
     list.append(row);
   });
@@ -191,7 +214,7 @@ export function setupChat(root) {
     const text = input.value.trim();
     if (!text || isSending) return;
 
-    messages.push({ role: "user", text });
+    messages.push({ role: "user", text, timestamp: new Date().toISOString() });
     saveMessages();
     updateHistoryStatus(historyStatus, historyStatusText, clearHistoryButton);
     renderMessages(list);
@@ -208,7 +231,9 @@ export function setupChat(root) {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: getGeminiContext() }),
+        body: JSON.stringify({
+          messages: getGeminiContext().map(({ role, text }) => ({ role, text })),
+        }),
       });
       let data;
       try {
@@ -224,7 +249,11 @@ export function setupChat(root) {
         throw new Error("La respuesta del servidor llegó vacía o con un formato inesperado.");
       }
 
-      messages.push({ role: "assistant", text: data.reply.trim() });
+      messages.push({
+        role: "assistant",
+        text: data.reply.trim(),
+        timestamp: new Date().toISOString(),
+      });
       saveMessages();
       updateHistoryStatus(historyStatus, historyStatusText, clearHistoryButton);
       renderMessages(list);
