@@ -63,6 +63,8 @@ h1 span { color: var(--orange); }
 .hokage-art--home { width: min(100%, 22rem); justify-self: end; }
 .hokage-art--home img { mix-blend-mode: multiply; }
 .chat-page, .about-page { padding-block: 3rem; }
+.character-page { padding-block: 2rem 3rem; }
+.chat-page.character-page, .about-page.character-page { padding-block: 3rem; }
 .page-heading { margin-bottom: 2rem; }
 .page-heading--with-art { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .page-heading h1, .about-page h1 { font-size: clamp(2rem, 8vw, 3.5rem); }
@@ -145,12 +147,12 @@ h1 span { color: var(--orange); }
 }
 
 @media (max-width: 699px) {
-  .site-header { gap: .5rem; padding-inline: .75rem; }
+  .site-header { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .6rem .5rem; padding: .75rem; }
   .brand { gap: .35rem; font-size: .68rem; }
   .brand-mark { width: 1.75rem; height: 1.75rem; }
-  .main-nav { gap: .5rem; }
+  .main-nav { grid-column: 1 / -1; grid-row: 2; justify-content: center; gap: .8rem; }
   .main-nav a { font-size: .78rem; }
-  .theme-toggle { width: 2.35rem; min-width: 2.35rem; height: 2.35rem; padding: .4rem; }
+  .theme-toggle { grid-column: 2; grid-row: 1; width: 2.35rem; min-width: 2.35rem; height: 2.35rem; padding: .4rem; }
   .theme-toggle [data-theme-label] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%); }
   .hero-home { grid-template-columns: 1fr; gap: 1.5rem; }
   .hokage-art--home { width: min(75vw, 18rem); justify-self: center; }
@@ -189,11 +191,118 @@ h1 span { color: var(--orange); }
 @media (prefers-reduced-motion: reduce) {
   .typing-dots i { animation: none; opacity: .7; }
   .main-nav a, .main-nav a::after, .button-primary, .chat-clear-button, .theme-toggle, .social-links a,
-  .hokage-art img, .heading-art, .hokage-detail img, .chat-avatar { transition: none; }
+  .hokage-art img, .heading-art, .hokage-detail img, .chat-avatar, .character-home-art, .character-home-art img { transition: none; }
   .main-nav a:hover, .button-primary:hover, .social-links a:hover,
-  .hokage-art img:hover, .heading-art:hover, .hokage-detail img:hover, .chat-avatar:hover { transform: none; }
+  .hokage-art img:hover, .heading-art:hover, .hokage-detail img:hover, .chat-avatar:hover, .character-home-art:hover, .character-home-art:hover img { transform: none; }
 }
 
 @media (min-width: 1000px) {
   .hero { padding-block: 6rem; }
 }
+
+/* Identidad visual compartida y acentos propios de cada personaje. */
+.character-theme { --character-accent: #f26722; --character-deep: #d94a12; --character-soft: #fff0e5; --character-gradient: linear-gradient(135deg, #f26722, #ff9b52); }
+.character-theme--sasuke { --character-accent: #7652cc; --character-deep: #54349c; --character-soft: #eee9fa; --character-gradient: linear-gradient(135deg, #7548c5, #ac496e); }
+.character-theme--madara { --character-accent: #a92832; --character-deep: #711c29; --character-soft: #f6e7e7; --character-gradient: linear-gradient(135deg, #711c29, #d33a35); }
+.character-theme--kakashi { --character-accent: #627486; --character-deep: #41554e; --character-soft: #e9eef0; --character-gradient: linear-gradient(135deg, #526577, #647a69); }
+
+.gallery-page { position: relative; isolation: isolate; min-height: 100%; padding-block: clamp(2.5rem, 7vw, 5.5rem); background: var(--page-bg); }
+.gallery-page::before { position: absolute; z-index: -2; inset: 0; background-image: linear-gradient(180deg, #fffaf5e8 0%, #fffaf5df 55%, #fffaf5f2 100%), url("/assets/konoha-village-panorama.jpeg"); background-position: center, center 42%; background-size: cover; content: ""; }
+.gallery-content { position: relative; }
+.gallery-heading { position: relative; isolation: isolate; overflow: hidden; margin-bottom: 1.5rem; padding: clamp(1.25rem, 2.5vw, 2rem) 1rem; border: 1px solid var(--border); border-radius: 1.25rem; background: var(--surface); text-align: center; box-shadow: 0 .8rem 2.4rem #39251512; }
+.gallery-heading::before { position: absolute; z-index: -1; inset: 0; background-image: linear-gradient(90deg, var(--surface) 0%, #ffffffd9 50%, var(--surface) 100%), url("/assets/konoha-hokage-mountain.jpeg"); background-position: center, center 43%; background-size: cover; content: ""; opacity: .46; }
+.gallery-heading .eyebrow { margin-bottom: .55rem; }
+.gallery-heading h1 { max-width: none; font-size: clamp(2.5rem, 6.5vw, 4.5rem); }
+.gallery-heading h1 span { background: linear-gradient(100deg, #f26722, #bd4657 50%, #7652cc); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.gallery-description { max-width: 43rem; margin: .65rem auto .45rem; color: var(--muted); font-size: clamp(.95rem, 2vw, 1.1rem); line-height: 1.55; }
+.gallery-invitation { display: inline-flex; margin: .35rem 0 0; padding: .45rem .85rem; border: 1px solid #f2672244; border-radius: 999px; color: var(--orange); background: var(--surface); font-size: .85rem; font-weight: 800; letter-spacing: .03em; }
+.character-gallery { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+.character-card { display: flex; min-width: 0; flex-direction: column; overflow: hidden; border: 1px solid var(--border); border-radius: 1.1rem; color: var(--ink); background: var(--surface); text-decoration: none; box-shadow: 0 .75rem 2rem #39251512; transition: border-color .22s ease, box-shadow .22s ease, transform .22s ease; }
+.character-card:focus-visible { outline: 3px solid var(--character-accent); outline-offset: 4px; }
+.character-card-art { position: relative; overflow: hidden; aspect-ratio: 4 / 4.3; background: var(--character-soft); }
+.character-card-art::after { position: absolute; inset: 35% 0 0; background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--character-deep) 86%, transparent)); content: ""; }
+.character-card-art img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 32%; transition: transform .4s ease, filter .4s ease; }
+.character-card--naruto .character-card-art img { object-position: center 22%; }
+.character-card--sasuke .character-card-art img { object-position: center 34%; }
+.character-card--madara .character-card-art img { object-position: center 25%; }
+.character-card--kakashi .character-card-art img { object-position: center 24%; }
+.character-card-art-label { position: absolute; z-index: 1; right: .8rem; bottom: .75rem; left: .8rem; color: white; font-size: .72rem; font-weight: 750; letter-spacing: .08em; text-align: right; text-transform: uppercase; }
+.character-card-copy { flex: 1; padding: 1rem 1rem 1.15rem; border-top: 3px solid var(--character-accent); }
+.character-card-copy h2 { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin: 0; font-size: clamp(1.15rem, 2vw, 1.5rem); letter-spacing: -.03em; }
+.character-card-copy h2 span { display: grid; width: 1.9rem; height: 1.9rem; flex: 0 0 auto; place-items: center; border-radius: 50%; color: white; background: var(--character-gradient); font-size: 1rem; }
+.character-card-copy p { margin: .5rem 0 0; color: var(--muted); font-size: .82rem; line-height: 1.5; }
+.gallery-footnote { margin: 1.5rem 0 0; color: var(--muted); font-size: .85rem; text-align: center; }
+
+.button-back { width: fit-content; min-height: 2.55rem; margin: 1rem 0 1.25rem; padding: .55rem .85rem; border: 1px solid var(--border); color: var(--muted); background: var(--surface); font-size: .82rem; transition: border-color .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease; }
+.button-secondary { border: 1px solid var(--border); color: var(--ink); background: var(--surface); transition: border-color .2s ease, color .2s ease, background-color .2s ease, transform .2s ease; }
+.character-home-layout { display: grid; min-height: min(68vh, 42rem); grid-template-columns: minmax(0, 1.05fr) minmax(16rem, .85fr); align-items: center; gap: clamp(2rem, 6vw, 5rem); }
+.character-home-copy { position: relative; z-index: 1; }
+.character-home-copy h1 { max-width: 12ch; font-size: clamp(2.5rem, 7vw, 5rem); }
+.character-home-title { max-width: 36rem; margin: 1rem 0 0; color: var(--character-accent); font-size: clamp(1.1rem, 2.4vw, 1.5rem); font-weight: 750; line-height: 1.4; }
+.character-actions { display: flex; flex-wrap: wrap; gap: .7rem; margin-bottom: .75rem; }
+.character-page .button-primary { border-color: transparent; background: var(--character-gradient); box-shadow: 0 .5rem 1.25rem color-mix(in srgb, var(--character-accent) 25%, transparent); }
+.character-page .button-secondary { border-color: color-mix(in srgb, var(--character-accent) 35%, var(--border)); }
+.character-home-art { position: relative; width: min(100%, 27rem); justify-self: center; margin: 0; padding: .65rem; border: 1px solid color-mix(in srgb, var(--character-accent) 25%, var(--border)); border-radius: 1.25rem; background: var(--surface); box-shadow: 0 1.5rem 4rem color-mix(in srgb, var(--character-accent) 18%, transparent); transition: transform .28s ease, box-shadow .28s ease; }
+.character-home-art::before { position: absolute; z-index: -1; inset: 10% -6% -5% 10%; border-radius: 1.5rem; background: var(--character-gradient); content: ""; opacity: .22; filter: blur(1.4rem); }
+.character-home-art img { display: block; width: 100%; max-height: 38rem; border-radius: .85rem; object-fit: cover; transition: transform .28s ease, filter .28s ease; }
+.character-home-art--madara { border-color: transparent; background: transparent; box-shadow: none; }
+.character-home-art--madara img { filter: drop-shadow(0 1rem 1.25rem #711c2940); }
+.character-home-art figcaption { padding: .65rem .25rem .1rem; color: var(--muted); font-size: .77rem; font-weight: 750; letter-spacing: .06em; text-align: center; text-transform: uppercase; }
+.character-page .page-heading h1 { color: var(--ink); }
+.character-page .eyebrow { color: var(--character-accent); }
+.character-page .heading-art { border-color: color-mix(in srgb, var(--character-accent) 30%, white); box-shadow: 0 .5rem 1.5rem color-mix(in srgb, var(--character-accent) 17%, transparent); }
+.character-theme--sasuke .heading-art,
+.character-theme--madara .heading-art,
+.character-theme--kakashi .heading-art { object-position: center 8%; }
+.character-page .message--assistant, .character-page .chat-typing-bubble { background: var(--character-soft); }
+.character-page .chat-avatar { border-color: color-mix(in srgb, var(--character-accent) 32%, white); }
+.character-page .chat-form input:focus { border-color: var(--character-accent); outline-color: color-mix(in srgb, var(--character-accent) 22%, transparent); }
+.character-page .typing-dots i { background: var(--character-accent); }
+.character-page .message-copy-button:hover { color: var(--character-accent); background: color-mix(in srgb, var(--character-accent) 10%, transparent); }
+.character-page .chat-history-status[data-state="saved"] { color: var(--character-accent); }
+.character-page .chat-history-status[data-state="saved"]::before { background: var(--character-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--character-accent) 13%, transparent); }
+.character-page .about-art .hokage-art--about img { max-height: 34rem; object-fit: cover; }
+
+@media (hover: hover) and (pointer: fine) {
+  .character-card:hover { border-color: color-mix(in srgb, var(--character-accent) 58%, var(--border)); box-shadow: 0 1.25rem 2.5rem color-mix(in srgb, var(--character-accent) 18%, transparent); transform: translateY(-4px); }
+  .character-card:hover .character-card-art img { filter: saturate(1.08); transform: scale(1.035); }
+  .button-back:hover, .button-secondary:hover { border-color: var(--character-accent); color: var(--character-accent); box-shadow: 0 .35rem 1rem color-mix(in srgb, var(--character-accent) 12%, transparent); transform: translateY(-1px); }
+  .character-home-art:hover { box-shadow: 0 2rem 4rem color-mix(in srgb, var(--character-accent) 25%, transparent); transform: translateY(-5px); }
+  .character-home-art--madara:hover { box-shadow: none; }
+  .character-home-art:hover img { transform: scale(1.015); }
+  .character-page .button-primary:hover { border-color: var(--character-accent); color: var(--character-accent); background: var(--surface); box-shadow: 0 .75rem 1.5rem color-mix(in srgb, var(--character-accent) 22%, transparent); }
+}
+
+@media (max-width: 960px) {
+  .character-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .character-card-art { aspect-ratio: 5 / 4; }
+}
+
+@media (max-width: 699px) {
+  .gallery-page { padding-block: 1.5rem 2.5rem; }
+  .gallery-heading { margin-bottom: 1.1rem; padding: 1.2rem .9rem; }
+  .gallery-description { margin-top: .7rem; }
+  .character-gallery { gap: .7rem; }
+  .character-card { border-radius: .85rem; }
+  .character-card-art { aspect-ratio: 4 / 4.7; }
+  .character-card-copy { padding: .75rem .75rem .9rem; }
+  .character-card-copy p { font-size: .75rem; }
+  .character-card-art-label { font-size: .62rem; }
+  .character-home-layout { min-height: auto; grid-template-columns: 1fr; gap: 1rem; }
+  .character-home-copy h1 { font-size: clamp(2.4rem, 12vw, 4rem); }
+  .character-home-art { width: min(82vw, 22rem); }
+  .character-actions { flex-direction: column; align-items: stretch; }
+  .character-actions .button { width: 100%; }
+  .button-back { margin: 1.25rem 0 1rem; }
+}
+
+:root[data-theme="dark"] .gallery-page::before { background-image: linear-gradient(180deg, #1d1a18e8 0%, #1d1a18e0 55%, #1d1a18f2 100%), url("/assets/konoha-village-panorama.jpeg"); }
+:root[data-theme="dark"] .gallery-heading::before { background-image: linear-gradient(90deg, #292522f2 0%, #292522d9 50%, #292522f2 100%), url("/assets/konoha-hokage-mountain.jpeg"); }
+:root[data-theme="dark"] .gallery-invitation { border-color: color-mix(in srgb, var(--orange) 48%, transparent); }
+:root[data-theme="dark"] .character-theme--sasuke { --character-soft: #352d43; }
+:root[data-theme="dark"] .character-theme--madara { --character-soft: #3c272b; }
+:root[data-theme="dark"] .character-theme--kakashi { --character-soft: #2d3738; }
+:root[data-theme="dark"] .character-page .heading-art,
+:root[data-theme="dark"] .character-page .chat-avatar { border-color: color-mix(in srgb, var(--character-accent) 45%, var(--border)); }
+:root[data-theme="dark"] .character-page .message--assistant,
+:root[data-theme="dark"] .character-page .chat-typing-bubble { color: var(--ink); }
