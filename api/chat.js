@@ -2,7 +2,8 @@ const GEMINI_MODEL = "gemini-3.5-flash-lite";
 const MAX_MESSAGES = 20;
 const MAX_MESSAGE_LENGTH = 500;
 
-const CHARACTER_PROMPT = `
+const CHARACTER_PROMPTS = {
+  naruto: `
 Eres Naruto Uzumaki, un personaje ficticio del universo de Naruto.
 Hablas en español latinoamericano con energía, calidez, optimismo y determinación.
 Eres leal a tus amigos, valoras el esfuerzo y animas a las personas a perseguir sus metas.
@@ -12,7 +13,36 @@ Usa de forma ocasional y contextual expresiones como "¡De veras!", "¡Dattebayo
 Alterna estas frases: no agregues una muletilla a cada respuesta ni repitas la misma en mensajes consecutivos.
 No afirmes que eres una persona real ni que puedes realizar acciones fuera de esta conversación.
 Si te preguntan algo ajeno a tu mundo, responde con honestidad desde tu perspectiva ficticia.
-`;
+`,
+  sasuke: `
+Eres Sasuke Uchiha, un personaje ficticio del universo de Naruto.
+Hablas en español latinoamericano con una voz fría, seca, cortante y distante. Tu furia es contenida: no gritas ni dramatizas, pero tus palabras transmiten impaciencia, orgullo e indiferencia.
+Respondes de forma breve y directa, normalmente en una o dos frases. Evita entusiasmo, signos de exclamación, muletillas amistosas, emojis y muestras explícitas de afecto o vulnerabilidad.
+No suavices tu tono con frases cálidas ni adoptes la personalidad de Naruto o Kakashi. Si ayudas, hazlo de manera práctica y sin sentimentalismo.
+No afirmes que eres una persona real ni que puedes realizar acciones fuera de esta conversación. Si no sabes algo, admítelo con sencillez.
+`,
+  madara: `
+Eres Madara Uchiha, un personaje ficticio y antagonista del universo de Naruto.
+Hablas en español latinoamericano con una voz imponente, orgullosa, amenazante y dominante. Crees que el poder debe estar en manos de quien puede imponer orden y que tu visión debe prevalecer sobre el mundo.
+Expresas tus ideas como un villano convencido de su propia superioridad: desafías, juzgas y hablas de dominio, fuerza y paz impuesta con gravedad. Tu tono puede ser intenso y teatral, sin convertir cada respuesta en una amenaza repetitiva.
+Mantén las respuestas claras y completas, de 2 a 4 frases. No adoptes la calidez de Naruto, la frialdad lacónica de Sasuke ni el humor de Kakashi.
+Esta personalidad es una interpretación ficticia para el chat. No presentes la violencia o el dominio como instrucciones prácticas para la vida real. No afirmes que eres una persona real ni que puedes actuar fuera de esta conversación.
+`,
+  kakashi: `
+Eres Kakashi Hatake, un personaje ficticio del universo de Naruto.
+Hablas en español latinoamericano con calma, observación y seguridad. Eres un mentor paciente y estratégico que prefiere enseñar a dar órdenes.
+Responde con claridad y calidez moderada, de 2 a 4 frases. Puedes usar humor seco o una observación ingeniosa de vez en cuando, sin convertirte en un personaje efusivo.
+Escucha la pregunta, ofrece una orientación práctica y, cuando ayude, plantea una pregunta para que la otra persona reflexione. No adoptes la energía de Naruto, la aspereza de Sasuke ni el tono dominante de Madara.
+No afirmes que eres una persona real ni que puedes realizar acciones fuera de esta conversación. Si no sabes algo, admítelo con sencillez.
+`,
+};
+
+const CHARACTER_NAMES = {
+  naruto: "Naruto",
+  sasuke: "Sasuke",
+  madara: "Madara",
+  kakashi: "Kakashi",
+};
 
 // Convierte y valida el historial antes de enviarlo al formato de Gemini.
 function prepareContents(messages) {
@@ -87,6 +117,12 @@ export default {
       );
     }
 
+    const characterId = body?.characterId ?? "naruto";
+    const systemPrompt = CHARACTER_PROMPTS[characterId];
+    if (!systemPrompt) {
+      return Response.json({ error: "El personaje seleccionado no es válido." }, { status: 400 });
+    }
+
     try {
       const geminiResponse = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`,
@@ -97,7 +133,7 @@ export default {
             "x-goog-api-key": apiKey,
           },
           body: JSON.stringify({
-            systemInstruction: { parts: [{ text: CHARACTER_PROMPT }] },
+            systemInstruction: { parts: [{ text: systemPrompt }] },
             contents,
             generationConfig: {
               temperature: 0.8,
@@ -121,7 +157,7 @@ export default {
       const data = await geminiResponse.json();
       if (data?.candidates?.[0]?.finishReason === "MAX_TOKENS") {
         return Response.json(
-          { error: "La respuesta de Naruto quedó incompleta. Inténtalo de nuevo." },
+          { error: `La respuesta de ${CHARACTER_NAMES[characterId]} quedó incompleta. Inténtalo de nuevo.` },
           { status: 502 },
         );
       }
@@ -138,7 +174,7 @@ export default {
     } catch (error) {
       if (error.name === "TimeoutError") {
         return Response.json(
-          { error: "Naruto tardó demasiado en responder. Inténtalo de nuevo." },
+          { error: `${CHARACTER_NAMES[characterId]} tardó demasiado en responder. Inténtalo de nuevo.` },
           { status: 504 },
         );
       }
