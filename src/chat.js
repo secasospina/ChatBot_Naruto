@@ -125,7 +125,7 @@ function renderMessages(list) {
   const typing = list.querySelector("[data-chat-typing]");
   list.replaceChildren();
 
-  [greeting, ...messages].forEach(({ role, text, timestamp }) => {
+  [greeting, ...messages].forEach(({ role, text, timestamp }, index) => {
     const row = document.createElement("div");
     row.className = `message-row message-row--${role}`;
 
@@ -150,6 +150,15 @@ function renderMessages(list) {
       time.dateTime = timestamp;
       time.textContent = messageTime;
       message.append(time);
+    }
+    if (role === "assistant" && index > 0) {
+      const copyButton = document.createElement("button");
+      copyButton.className = "message-copy-button";
+      copyButton.type = "button";
+      copyButton.dataset.copyMessage = String(index - 1);
+      copyButton.setAttribute("aria-label", "Copiar respuesta de Naruto");
+      copyButton.textContent = "Copiar";
+      message.append(copyButton);
     }
     row.append(message);
     list.append(row);
@@ -177,6 +186,7 @@ export function setupChat(root) {
   const sendButton = root.querySelector("[data-send-button]");
   const typing = root.querySelector("[data-chat-typing]");
   const error = root.querySelector("[data-chat-error]");
+  const copyStatus = root.querySelector("[data-copy-status]");
   const historyStatus = root.querySelector("[data-history-status]");
   const historyStatusText = root.querySelector("[data-history-status-text]");
   const clearHistoryButton = root.querySelector("[data-clear-history]");
@@ -184,6 +194,26 @@ export function setupChat(root) {
   messages = loadMessages();
   updateHistoryStatus(historyStatus, historyStatusText, clearHistoryButton);
   renderMessages(list);
+
+  // Copia una respuesta de Naruto y anuncia el resultado para accesibilidad.
+  list.addEventListener("click", async (event) => {
+    const button = event.target.closest("[data-copy-message]");
+    if (!button) return;
+
+    const message = messages[Number(button.dataset.copyMessage)];
+    if (!message || message.role !== "assistant") return;
+
+    try {
+      await navigator.clipboard.writeText(message.text);
+      button.textContent = "Copiado";
+      copyStatus.textContent = "Respuesta de Naruto copiada al portapapeles.";
+      window.setTimeout(() => {
+        if (button.isConnected) button.textContent = "Copiar";
+      }, 1600);
+    } catch {
+      copyStatus.textContent = "No se pudo copiar la respuesta. Revisa los permisos del navegador.";
+    }
+  });
 
   // Borra el historial guardado solo después de confirmar la acción.
   clearHistoryButton.addEventListener("click", () => {

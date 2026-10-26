@@ -8,10 +8,25 @@
   --ink: #24201d;
   --muted: #6b625c;
   --surface: #ffffff;
+  --page-bg: #fffaf5;
+  --border: #eee4dc;
+  --assistant-bubble: #fff2e8;
+  --input-bg: #ffffff;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ink: #f2ece6;
+  --muted: #c0b5ac;
+  --surface: #292522;
+  --page-bg: #1d1a18;
+  --border: #48413b;
+  --assistant-bubble: #3b3029;
+  --input-bg: #302b27;
 }
 
 * { box-sizing: border-box; }
-body { min-width: 320px; min-height: 100vh; margin: 0; display: flex; flex-direction: column; }
+body { min-width: 320px; min-height: 100vh; margin: 0; display: flex; flex-direction: column; color: var(--ink); background: var(--page-bg); }
 a { color: inherit; }
 .site-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem; background: var(--surface); border-bottom: 1px solid #eee4dc; }
 .brand { display: inline-flex; align-items: center; gap: .6rem; color: var(--ink); font-size: .85rem; font-weight: 800; letter-spacing: .08em; text-decoration: none; }
@@ -23,6 +38,12 @@ a { color: inherit; }
 .main-nav a[aria-current]::after { transform: scaleX(1); }
 .main-nav a:focus-visible { border-radius: .2rem; color: var(--orange); outline: 2px solid #f2672266; outline-offset: 4px; }
 .main-nav a:focus-visible::after { transform: scaleX(1); }
+.theme-toggle { display: inline-flex; min-height: 2.5rem; align-items: center; justify-content: center; gap: .45rem; padding: .45rem .7rem; border: 1px solid var(--border); border-radius: .65rem; color: var(--ink); background: var(--surface); font: inherit; font-size: .8rem; font-weight: 700; cursor: pointer; transition: color .2s ease, background-color .2s ease, border-color .2s ease, transform .2s ease; }
+.theme-toggle:focus-visible, .message-copy-button:focus-visible { outline: 3px solid #f2672266; outline-offset: 3px; }
+.theme-icon { width: 1.1rem; height: 1.1rem; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+.theme-icon--sun { display: none; }
+:root[data-theme="dark"] .theme-icon--moon { display: none; }
+:root[data-theme="dark"] .theme-icon--sun { display: block; }
 #app { flex: 1; }
 .page-shell { width: min(100% - 2rem, 62rem); margin-inline: auto; }
 .hero { display: grid; min-height: 68vh; align-items: center; padding-block: 4rem; }
@@ -78,6 +99,8 @@ h1 span { color: var(--orange); }
 .message-text { margin: 0; line-height: 1.55; overflow-wrap: anywhere; white-space: pre-wrap; }
 .message-time { display: block; margin-top: .45rem; color: var(--muted); font-size: .68rem; line-height: 1; text-align: right; }
 .message--user .message-time { color: #ffffffb8; }
+.message-copy-button { display: block; margin: .5rem 0 0 auto; padding: .2rem .35rem; border: 0; border-radius: .35rem; color: var(--muted); background: transparent; font: inherit; font-size: .7rem; cursor: pointer; }
+.message-copy-button:hover { color: var(--orange); background: #f2672214; }
 .chat-typing { display: flex; align-items: flex-end; gap: .55rem; color: var(--muted); font-size: .8rem; }
 .chat-typing[hidden] { display: none; }
 .chat-typing-bubble { display: flex; min-height: 2.75rem; align-items: center; gap: .65rem; padding: .6rem .85rem; border-radius: 1rem 1rem 1rem .35rem; background: #fff2e8; }
@@ -122,6 +145,13 @@ h1 span { color: var(--orange); }
 }
 
 @media (max-width: 699px) {
+  .site-header { gap: .5rem; padding-inline: .75rem; }
+  .brand { gap: .35rem; font-size: .68rem; }
+  .brand-mark { width: 1.75rem; height: 1.75rem; }
+  .main-nav { gap: .5rem; }
+  .main-nav a { font-size: .78rem; }
+  .theme-toggle { width: 2.35rem; min-width: 2.35rem; height: 2.35rem; padding: .4rem; }
+  .theme-toggle [data-theme-label] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%); }
   .hero-home { grid-template-columns: 1fr; gap: 1.5rem; }
   .hokage-art--home { width: min(75vw, 18rem); justify-self: center; }
   .page-heading--with-art { align-items: flex-start; }
@@ -132,9 +162,33 @@ h1 span { color: var(--orange); }
   .footer-content { min-height: 5rem; flex-direction: column; justify-content: center; gap: .6rem; padding-block: .9rem; text-align: center; }
 }
 
+:root[data-theme="dark"] .site-header,
+:root[data-theme="dark"] .site-footer,
+:root[data-theme="dark"] .chat-panel,
+:root[data-theme="dark"] .hokage-detail,
+:root[data-theme="dark"] .theme-toggle { border-color: var(--border); background: var(--surface); }
+:root[data-theme="dark"] .site-header,
+:root[data-theme="dark"] .site-footer,
+:root[data-theme="dark"] .chat-panel,
+:root[data-theme="dark"] .chat-toolbar,
+:root[data-theme="dark"] .chat-form { border-color: var(--border); }
+:root[data-theme="dark"] .hokage-detail,
+:root[data-theme="dark"] .heading-art,
+:root[data-theme="dark"] .chat-avatar { border-color: var(--border); background: var(--surface); }
+:root[data-theme="dark"] .chat-history-status[data-state="saved"] { color: #8ed3a8; }
+:root[data-theme="dark"] .chat-clear-button { border-color: var(--border); color: var(--muted); background: var(--surface); }
+:root[data-theme="dark"] .message--assistant,
+:root[data-theme="dark"] .chat-typing-bubble { color: var(--ink); background: var(--assistant-bubble); }
+:root[data-theme="dark"] .chat-form input { border-color: var(--border); color: var(--ink); background: var(--input-bg); }
+:root[data-theme="dark"] .hokage-art--home img { mix-blend-mode: normal; }
+:root[data-theme="dark"] .chat-error { color: #ff9388; }
+:root[data-theme="dark"] .theme-toggle:hover { border-color: var(--orange); color: var(--orange); }
+:root[data-theme="dark"] .message-copy-button { color: #d2c4b8; }
+:root[data-theme="dark"] .message-copy-button:hover { color: #ff9a66; background: #f2672226; }
+
 @media (prefers-reduced-motion: reduce) {
   .typing-dots i { animation: none; opacity: .7; }
-  .main-nav a, .main-nav a::after, .button-primary, .chat-clear-button, .social-links a,
+  .main-nav a, .main-nav a::after, .button-primary, .chat-clear-button, .theme-toggle, .social-links a,
   .hokage-art img, .heading-art, .hokage-detail img, .chat-avatar { transition: none; }
   .main-nav a:hover, .button-primary:hover, .social-links a:hover,
   .hokage-art img:hover, .heading-art:hover, .hokage-detail img:hover, .chat-avatar:hover { transform: none; }

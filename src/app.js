@@ -1,6 +1,43 @@
 import { setupChat } from "./chat.js";
 
 const app = document.querySelector("#app");
+const THEME_STORAGE_KEY = "hokage-chat-theme-v1";
+
+// Aplica y guarda la preferencia visual del usuario en este navegador.
+function setupThemeToggle() {
+  const button = document.querySelector("[data-theme-toggle]");
+  const label = button.querySelector("[data-theme-label]");
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+  let theme = "light";
+
+  try {
+    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    if (["light", "dark"].includes(savedTheme)) theme = savedTheme;
+  } catch {
+    // El selector sigue funcionando aunque el navegador bloquee localStorage.
+  }
+
+  // Mantiene el atributo accesible, el texto del botón y el color del navegador sincronizados.
+  function applyTheme() {
+    document.documentElement.dataset.theme = theme;
+    button.setAttribute("aria-pressed", String(theme === "dark"));
+    label.textContent = theme === "dark" ? "Modo claro" : "Modo oscuro";
+    button.setAttribute("aria-label", `Cambiar a ${theme === "dark" ? "modo claro" : "modo oscuro"}`);
+    themeColor.content = theme === "dark" ? "#24201d" : "#f26722";
+  }
+
+  button.addEventListener("click", () => {
+    theme = theme === "dark" ? "light" : "dark";
+    applyTheme();
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
+    } catch {
+      // El cambio visual permanece activo aunque no se pueda guardar.
+    }
+  });
+
+  applyTheme();
+}
 
 const views = {
   "/home": `
@@ -16,7 +53,7 @@ const views = {
         <p class="hero-note">Una experiencia de práctica con inteligencia artificial.</p>
       </div>
       <figure class="hokage-art hokage-art--home">
-        <img src="/assets/naruto-hokage-chibi.jpg" alt="Naruto sonríe con el atuendo y el sombrero del Séptimo Hokage" />
+        <img src="/assets/naruto-hokage-chibi-transparent.png" alt="Naruto sonríe con el atuendo y el sombrero del Séptimo Hokage" />
         <figcaption>El sueño de convertirse en Hokage</figcaption>
       </figure>
     </section>
@@ -40,6 +77,7 @@ const views = {
             Borrar historial
           </button>
         </div>
+        <span class="visually-hidden" data-copy-status role="status" aria-live="polite"></span>
         <div class="chat-messages" data-chat-messages aria-live="polite" aria-relevant="additions">
           <div class="chat-typing" data-chat-typing role="status" hidden>
             <img class="chat-avatar" src="/assets/naruto-avatar.jpg" alt="" aria-hidden="true" />
@@ -63,7 +101,7 @@ const views = {
           />
           <button class="button button-primary" type="submit" data-send-button>Enviar</button>
         </form>
-        <p class="chat-hint">Máximo 500 caracteres. El historial se guarda aquí y puedes borrarlo cuando quieras.</p>
+        <p class="chat-hint">Máximo 500 caracteres. Presiona Enter para enviar. El historial se guarda aquí y puedes borrarlo cuando quieras.</p>
       </div>
     </section>
   `,
@@ -124,4 +162,5 @@ document.addEventListener("click", (event) => {
 });
 
 window.addEventListener("popstate", renderRoute);
+setupThemeToggle();
 renderRoute();
