@@ -178,30 +178,40 @@ function renderChat(character) {
         </div>
         <img class="heading-art" src="${character.homeImage}" alt="${character.fullName}" />
       </div>
-      <div class="chat-panel">
-        <div class="chat-toolbar">
-          <p class="chat-history-status" data-history-status data-state="empty" role="status">
-            <span data-history-status-text>Aún no hay historial guardado</span>
-          </p>
-          <button class="button chat-clear-button" type="button" data-clear-history disabled>Borrar historial</button>
-        </div>
-        <span class="visually-hidden" data-copy-status role="status" aria-live="polite"></span>
-        <div class="chat-messages" data-chat-messages aria-live="polite" aria-relevant="additions">
-          <div class="chat-typing" data-chat-typing role="status" hidden>
-            <img class="chat-avatar" src="${character.chatAvatar}" alt="" aria-hidden="true" />
-            <div class="chat-typing-bubble">
-              <span>${character.name} está escribiendo</span>
-              <span class="typing-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <div class="chat-workspace">
+        <aside class="conversation-sidebar" aria-label="Conversaciones de ${character.name}">
+          <div class="conversation-sidebar-heading">
+            <h2>Mis chats</h2>
+            <button class="button button-new-chat" type="button" data-new-conversation>+ Nuevo chat</button>
+          </div>
+          <div class="conversation-list" data-conversation-list aria-label="Chats guardados"></div>
+          <button class="button chat-clear-button" type="button" data-clear-history disabled>Vaciar todos</button>
+        </aside>
+        <div class="chat-panel">
+          <div class="chat-toolbar">
+            <p class="chat-history-status" data-history-status data-state="empty" role="status">
+              <span data-history-status-text>Chat nuevo; se guardará al enviar un mensaje</span>
+            </p>
+            <span class="chat-current-title" data-current-conversation-title>Nueva conversación</span>
+          </div>
+          <span class="visually-hidden" data-copy-status role="status" aria-live="polite"></span>
+          <div class="chat-messages" data-chat-messages aria-live="polite" aria-relevant="additions">
+            <div class="chat-typing" data-chat-typing role="status" hidden>
+              <img class="chat-avatar" src="${character.chatAvatar}" alt="" aria-hidden="true" />
+              <div class="chat-typing-bubble">
+                <span>${character.name} está escribiendo</span>
+                <span class="typing-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              </div>
             </div>
           </div>
+          <p class="chat-error" data-chat-error role="alert" hidden></p>
+          <form class="chat-form" data-chat-form>
+            <label class="visually-hidden" for="chat-input">Escribe tu mensaje para ${character.name}</label>
+            <input id="chat-input" name="message" type="text" maxlength="500" placeholder="Escribe tu mensaje..." autocomplete="off" required />
+            <button class="button button-primary" type="submit" data-send-button>Enviar</button>
+          </form>
+          <p class="chat-hint">Máximo 500 caracteres. Presiona Enter para enviar. Tus conversaciones se guardan en este navegador.</p>
         </div>
-        <p class="chat-error" data-chat-error role="alert" hidden></p>
-        <form class="chat-form" data-chat-form>
-          <label class="visually-hidden" for="chat-input">Escribe tu mensaje para ${character.name}</label>
-          <input id="chat-input" name="message" type="text" maxlength="500" placeholder="Escribe tu mensaje..." autocomplete="off" required />
-          <button class="button button-primary" type="submit" data-send-button>Enviar</button>
-        </form>
-        <p class="chat-hint">Máximo 500 caracteres. Presiona Enter para enviar. El historial de ${character.name} se guarda aquí y puedes borrarlo cuando quieras.</p>
       </div>
     </section>
   `;
