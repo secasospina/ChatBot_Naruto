@@ -176,4 +176,4 @@ Desarrollado por **Sebastián Castaño Ospina**.
 
 ## Documentación: uso de la IA
 
-El proyecto se realizó con apoyo de herramientas de inteligencia artificial, principalmente para resolver dudas durante el desarrollo y recibir orientación sobre el diseño visual del sitio web. La documentación detallada se completará en [`docs/uso-de-ia.md`](docs/uso-de-ia.md).
+El proyecto se realizó con apoyo de herramientas de inteligencia artificial para resolver dudas, explorar el diseño visual y colaborar en la implementación. La [documentación del uso de IA](docs/uso-de-ia.md) describe ese apoyo y el uso de Gemini dentro de la aplicación.
