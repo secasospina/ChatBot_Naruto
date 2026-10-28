@@ -56,4 +56,4 @@ Las siguientes capturas muestran el resultado visual de la aplicación y la ejec
 
 ### Resultado de las pruebas automatizadas
 
-![Vitest: ocho pruebas aprobadas](capturas/pruebas-endpoint.jpg)
+![Vitest: pruebas aprobadas](capturas/pruebas.png)
