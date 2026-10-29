@@ -163,7 +163,7 @@ No es necesario configurar un comando de build ni una carpeta de salida para est
 | Chat de un personaje   | `/:personaje/chat`  |
 | Acerca de un personaje | `/:personaje/about` |
 
-En esas rutas, `:personaje` puede ser `naruto`, `sasuke`, `madara` o `kakashi`. Las rutas antiguas `/chat` y `/about` llevan al chat y a la página Acerca de Naruto.
+En esas rutas, `:personaje` puede ser `naruto`, `sasuke`, `madara` o `kakashi`. Las rutas antiguas `/chat` y `/about` llevan al chat y a la página Acerca de Naruto. Cualquier otra ruta muestra una vista 404 con un enlace para volver a la galería.
 
 ## Estructura del proyecto
 
@@ -197,6 +197,7 @@ En esas rutas, `:personaje` puede ser `naruto`, `sasuke`, `madara` o `kakashi`. 
 
 - **Contexto de hasta 100 mensajes.** En cada solicitud se envían a Gemini los últimos 100 mensajes de la conversación activa (unos 50 intercambios), que en la práctica es el historial completo de una conversación normal. El tope protege el consumo de tokens y evita solicitudes cada vez más grandes. El historial completo sigue guardado en el navegador (`localStorage`).
 - **Límites de tamaño por rol.** Los mensajes que escribe el usuario se limitan a 500 caracteres; las respuestas del personaje admiten hasta 6000 caracteres para que nunca se descarten al recargar.
+- **Reglas generales en el prompt.** Además de la personalidad de cada personaje, el servidor añade reglas comunes: mantenerse en el universo de Naruto, no opinar sobre personas reales, política ni religión, y no dar instrucciones dañosas ni consejos médicos, legales o financieros.
 - **Clave protegida.** `GEMINI_API_KEY` solo existe en el servidor (función serverless de Vercel). El navegador nunca la ve.
 - **Rate limiting (límite de uso).** El endpoint `/api/chat` es público y hoy no limita cuántas solicitudes puede hacer una persona. En esta versión se controla con límites de tamaño (máximo 500 caracteres por mensaje del usuario y 100 mensajes por solicitud). Como mejora futura se puede añadir un límite por IP o una herramienta de rate limiting.
 - **Mobile-first.** El CSS base está pensado para celular y se amplía con `min-width` en 700 px (tableta) y 960 px (escritorio).

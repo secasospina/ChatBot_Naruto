@@ -21,6 +21,11 @@ export async function requestCharacterReply(characterId, conversationMessages) {
     );
   }
 
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.error || 'No se pudo obtener una respuesta.');
+  }
+
   let data;
   try {
     data = await response.json();
@@ -30,8 +35,6 @@ export async function requestCharacterReply(characterId, conversationMessages) {
     );
   }
 
-  if (!response.ok)
-    throw new Error(data?.error || 'No se pudo obtener una respuesta.');
   if (typeof data?.reply !== 'string' || !data.reply.trim()) {
     throw new Error(
       'La respuesta del servidor llegó vacía o con un formato inesperado.'

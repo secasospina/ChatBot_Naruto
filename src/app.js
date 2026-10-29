@@ -217,6 +217,17 @@ function renderChat(character) {
   `;
 }
 
+// Vista para rutas que no existen.
+function renderNotFound() {
+  return `
+    <section class="page-shell not-found">
+      <h1>404</h1>
+      <p>Esta página no existe.</p>
+      <a class="button button-primary" href="/home" data-link>Volver a los personajes</a>
+    </section>
+  `;
+}
+
 // Resuelve las rutas antiguas de Naruto y valida las rutas de cada personaje.
 function resolveRoute(path) {
   if (path === "/" || path === "/home") return { path: "/home", page: "gallery" };
@@ -224,7 +235,7 @@ function resolveRoute(path) {
   if (path === "/about") return { path: "/naruto/about", page: "about", character: characters.naruto };
 
   const match = path.match(/^\/(naruto|sasuke|madara|kakashi)\/(home|about|chat)$/);
-  if (!match) return { path: "/home", page: "gallery" };
+  if (!match) return { path, page: "notfound" };
   return { path, page: match[2], character: characters[match[1]] };
 }
 
@@ -260,10 +271,13 @@ function renderRoute() {
   if (route.page === "home") app.innerHTML = renderCharacterHome(route.character);
   if (route.page === "about") app.innerHTML = renderAbout(route.character);
   if (route.page === "chat") app.innerHTML = renderChat(route.character);
+  if (route.page === "notfound") app.innerHTML = renderNotFound();
 
   document.title = route.character
     ? `${route.character.fullName} | Hokage Chat`
-    : "Naruto Chatbot | Elige tu personaje";
+    : route.page === "notfound"
+      ? "404 | Hokage Chat"
+      : "Naruto Chatbot | Elige tu personaje";
 
   renderNavigation(route);
   document.querySelectorAll("a[data-link]").forEach((link) => {

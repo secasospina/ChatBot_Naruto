@@ -109,6 +109,9 @@ describe('endpoint del chat con Gemini', () => {
     expect(geminiBody.systemInstruction.parts[0].text).toContain(
       'Eres Naruto Uzumaki'
     );
+    expect(geminiBody.systemInstruction.parts[0].text).toContain(
+      'No opines sobre personas reales'
+    );
   });
 
   it('convierte una respuesta temporal de Gemini en un error recuperable', async () => {

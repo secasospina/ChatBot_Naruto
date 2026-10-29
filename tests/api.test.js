@@ -65,7 +65,7 @@ describe('requestCharacterReply', () => {
 
   it('detecta respuestas que no son JSON', async () => {
     fetchMock.mockResolvedValueOnce(
-      new Response('<html>Error</html>', { status: 500 })
+      new Response('<html>Error</html>', { status: 200 })
     );
 
     await expect(
